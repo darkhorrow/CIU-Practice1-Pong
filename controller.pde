@@ -12,6 +12,13 @@ class GameManager {
     boolean isGameOver = false;
     
     String scoreSelector = "5";
+    EffectBox[] usableEffects = { new SmallBallEffectBox(new Position(random(200, width-200), random(200, height-200)), new Dimension(60, 60), color(255)),
+                                  new BigBallEffectBox(new Position(random(200, width-200), random(200, height-200)), new Dimension(60, 60), color(255, 0,0)),
+                                  new SlowBallEffectBox(new Position(random(200, width-200), random(200, height-200)), new Dimension(60, 60), color(0,0, 255)),
+                                  new FastBallEffectBox(new Position(random(200, width-200), random(200, height-200)), new Dimension(60, 60), color(0,255,0))
+    };
+    ArrayList<EffectBox> effects = new ArrayList<EffectBox>();
+    int timer = millis();
     
     public GameManager() {
          ball = new Ball(new Dimension(BALL_SIZE, BALL_SIZE), BALL_COLOR);
@@ -21,16 +28,26 @@ class GameManager {
     
     public void update() {
         background(0);
+        println(isPaused);
         if(isInGame) {
+              
             drawScenario();
         
             playerLeft.display();
             playerRight.display();
             ball.display();
             
+            displayEffects();
+            
             displayScores();
             
             if(!isPaused && !isGameOver){
+                if(millis() > timer + (EFFECT_SECONDS*1000)) {
+                    int chooser = int(random(usableEffects.length)); 
+                    effects.add(usableEffects[chooser]);
+                    timer = millis();
+                }
+              
                 playerLeft.move();
                 playerRight.move();
             
@@ -38,10 +55,12 @@ class GameManager {
             
                 collisionBallToWall();
                 collisionBallToPlayer();
+                checkBallEffectsCollision();
             } else if(isGameOver) {
                 displayGameOver();
             } else {
-                displayRestart(); 
+                timer = millis();
+                displayRestart();
             }
         } else {
             if(GAME_OVER.isPlaying()) {
@@ -49,6 +68,8 @@ class GameManager {
             } else {
                 leftScore = 0;
                 rightScore = 0;
+                timer = millis();
+                effects = new ArrayList<EffectBox>();
                 displayGameStart();
             }
         }
@@ -58,11 +79,13 @@ class GameManager {
         if(ball.currentPosition.x > width) {
             leftScore++;
             thread("PointSound");
+            effects = new ArrayList<EffectBox>();
             respawnBall();  
         }
         if(ball.currentPosition.x < 0) {
             rightScore++;
             thread("PointSound");
+            effects = new ArrayList<EffectBox>();
             respawnBall();
         }
         if(ball.currentPosition.y > height - (ball.dimension.width/2) || ball.currentPosition.y < 0 + (ball.dimension.width/2)) {
@@ -165,7 +188,6 @@ class GameManager {
         fill(color(0,random(255),random(255)));
         color c;
         if(max(leftScore, rightScore) == leftScore) {
-            print(rightScore);
             text("Player 1 wins", width/2, height/2 + 100);
             c = playerLeft.fillColor;
         } else {
@@ -204,6 +226,30 @@ class GameManager {
         }
     }
     
+    void displayEffects() {
+        for(EffectBox effect : effects) {
+            effect.display();
+        }
+    }
+    
+    public void checkBallEffectsCollision() {
+        float ballX = ball.currentPosition.x;
+        float ballY = ball.currentPosition.y;
+        float ballRadius = ball.dimension.height;
+        ArrayList<EffectBox> iterAux = new ArrayList<EffectBox>(effects);
+        for(EffectBox effect : iterAux) {
+            float left = effect.currentPosition.x - effect.dimension.width/2;
+            float right = effect.currentPosition.x + effect.dimension.width/2;
+            float top = effect.currentPosition.y - effect.dimension.height/2;
+            float bottom = effect.currentPosition.y + effect.dimension.height/2;
+            
+            if(ballX + ballRadius > left && ballX - ballRadius < right && ballY + ballRadius > top && ballY - ballRadius < bottom) {
+                effect.triggerEffect();
+                effects.remove(effect);
+            }
+        }
+    }
+    
     public void gameStartScore() {
         if(key >= 48 && key <= 57) {
             int number = key - 48;
@@ -217,6 +263,7 @@ class GameManager {
                     maxScore = 5;
                 }
                 manager.isInGame = true;
+                manager.isPaused = true;
             }
             if(keyCode == BACKSPACE) {
                 scoreSelector = scoreSelector.substring(0, max(scoreSelector.length()-1, 0));

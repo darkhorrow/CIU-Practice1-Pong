@@ -18,6 +18,9 @@ SoundFile GAME_OVER;
 // Text defaults
 PFont FONT;
 
+// Effects aparition
+int EFFECT_SECONDS = 5;
+
 GameManager manager;
 
 void setup() {

@@ -65,6 +65,81 @@ class Player {
     
 }
 
+interface EffectTriggerer {
+    public void triggerEffect();
+}
+
+abstract class EffectBox implements EffectTriggerer {
+    Position currentPosition;
+    Dimension dimension;
+    color fillColor;
+    
+    public EffectBox(Position aparitionPosition, Dimension size, color fill) {
+        currentPosition = aparitionPosition;
+        dimension = size;
+        fillColor = fill;
+    }
+    
+    public void display() {
+         fill(fillColor);
+         rectMode(CENTER);
+         rect(currentPosition.x, currentPosition.y, dimension.width, dimension.height);
+    }
+    
+}
+
+class SmallBallEffectBox extends EffectBox {
+  
+    public SmallBallEffectBox(Position aparitionPosition, Dimension size, color fill) {
+        super(aparitionPosition, size, fill);
+    }
+    
+    public void triggerEffect(){
+        manager.ball.dimension.width = BALL_SIZE/2;
+        manager.ball.dimension.height = BALL_SIZE/2;
+    }   
+    
+}
+
+class BigBallEffectBox extends EffectBox {
+  
+    public BigBallEffectBox(Position aparitionPosition, Dimension size, color fill) {
+        super(aparitionPosition, size, fill);
+    }
+    
+    public void triggerEffect(){
+        manager.ball.dimension.width = BALL_SIZE*1.5;
+        manager.ball.dimension.height = BALL_SIZE*1.5;
+    }   
+    
+}
+
+class SlowBallEffectBox extends EffectBox {
+  
+    public SlowBallEffectBox(Position aparitionPosition, Dimension size, color fill) {
+        super(aparitionPosition, size, fill);
+    }
+    
+    public void triggerEffect(){
+        manager.ball.currentSpeed.x = manager.ball.currentSpeed.x/2;
+        manager.ball.currentSpeed.y = manager.ball.currentSpeed.y/2;
+    }   
+    
+}
+
+class FastBallEffectBox extends EffectBox {
+  
+    public FastBallEffectBox(Position aparitionPosition, Dimension size, color fill) {
+        super(aparitionPosition, size, fill);
+    }
+    
+    public void triggerEffect(){
+        manager.ball.currentSpeed.x = manager.ball.currentSpeed.x*2;
+        manager.ball.currentSpeed.y = manager.ball.currentSpeed.y*2;
+    }   
+    
+}
+
 enum PlayerSide {
     LEFT, RIGHT; 
 }
