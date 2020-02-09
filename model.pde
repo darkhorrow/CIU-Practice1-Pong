@@ -3,7 +3,7 @@ class Ball {
     Speed currentSpeed;
     Dimension dimension;
     color fillColor;
-    final float MOVEMENT = 5;
+    float MOVEMENT = 5;
     
     public Ball(Dimension size, color fill) {
          currentPosition = new Position(width/2, height/2);
@@ -67,23 +67,38 @@ class Player {
 
 interface EffectTriggerer {
     public void triggerEffect();
+    public void revertEffect();
 }
 
 abstract class EffectBox implements EffectTriggerer {
     Position currentPosition;
     Dimension dimension;
     color fillColor;
+    PImage icon;
+    int effectiveTime = 0;
+    boolean triggered = false;
     
-    public EffectBox(Position aparitionPosition, Dimension size, color fill) {
+    public EffectBox(Position aparitionPosition, Dimension size, color fill, PImage iconImage) {
         currentPosition = aparitionPosition;
         dimension = size;
         fillColor = fill;
+        icon = iconImage;
     }
     
     public void display() {
-         fill(fillColor);
-         rectMode(CENTER);
-         rect(currentPosition.x, currentPosition.y, dimension.width, dimension.height);
+         if(triggered) {
+             if(millis() > effectiveTime + EFFECT_DISPELL_SECONDS*1000) {
+                 revertEffect();
+                 manager.effects.remove(this);
+             }
+         } else {
+             noFill();
+             stroke(fillColor);
+             rectMode(CENTER);
+             rect(currentPosition.x, currentPosition.y, dimension.width, dimension.height);
+             imageMode(CENTER);
+             image(icon, currentPosition.x, currentPosition.y, dimension.width - 10, dimension.height - 10);
+         }
     }
     
 }
@@ -91,52 +106,84 @@ abstract class EffectBox implements EffectTriggerer {
 class SmallBallEffectBox extends EffectBox {
   
     public SmallBallEffectBox(Position aparitionPosition, Dimension size, color fill) {
-        super(aparitionPosition, size, fill);
+        super(aparitionPosition, size, fill, smallBallImg);
     }
     
     public void triggerEffect(){
+        triggered = true;
+        effectiveTime = millis();
         manager.ball.dimension.width = BALL_SIZE/2;
         manager.ball.dimension.height = BALL_SIZE/2;
-    }   
+    }
+    
+    public void revertEffect() {
+        manager.ball.dimension.width = BALL_SIZE;
+        manager.ball.dimension.height = BALL_SIZE;
+    }
     
 }
 
 class BigBallEffectBox extends EffectBox {
   
     public BigBallEffectBox(Position aparitionPosition, Dimension size, color fill) {
-        super(aparitionPosition, size, fill);
+        super(aparitionPosition, size, fill, bigBallImg);
     }
     
-    public void triggerEffect(){
+    public void triggerEffect() {
+        triggered = true;
+        effectiveTime = millis();
         manager.ball.dimension.width = BALL_SIZE*1.5;
         manager.ball.dimension.height = BALL_SIZE*1.5;
-    }   
+    }
+
+    public void revertEffect() {
+        manager.ball.dimension.width = BALL_SIZE;
+        manager.ball.dimension.height = BALL_SIZE;
+    }
     
 }
 
 class SlowBallEffectBox extends EffectBox {
   
     public SlowBallEffectBox(Position aparitionPosition, Dimension size, color fill) {
-        super(aparitionPosition, size, fill);
+        super(aparitionPosition, size, fill, slowBallImg);
     }
     
-    public void triggerEffect(){
-        manager.ball.currentSpeed.x = manager.ball.currentSpeed.x/2;
-        manager.ball.currentSpeed.y = manager.ball.currentSpeed.y/2;
-    }   
+    public void triggerEffect() {
+        triggered = true;
+        effectiveTime = millis();
+        manager.ball.MOVEMENT /= 1.45;
+        manager.ball.currentSpeed.x = manager.ball.currentSpeed.x/1.45;
+        manager.ball.currentSpeed.y = manager.ball.currentSpeed.y/1.45;
+    }
+    
+    public void revertEffect() {
+        manager.ball.MOVEMENT *= 1.45;
+        manager.ball.currentSpeed.x = manager.ball.currentSpeed.x*1.45;
+        manager.ball.currentSpeed.y = manager.ball.currentSpeed.y*1.45;;
+    }
     
 }
 
 class FastBallEffectBox extends EffectBox {
   
     public FastBallEffectBox(Position aparitionPosition, Dimension size, color fill) {
-        super(aparitionPosition, size, fill);
+        super(aparitionPosition, size, fill, fastBallImg);
     }
     
-    public void triggerEffect(){
-        manager.ball.currentSpeed.x = manager.ball.currentSpeed.x*2;
-        manager.ball.currentSpeed.y = manager.ball.currentSpeed.y*2;
-    }   
+    public void triggerEffect() {
+        triggered = true;
+        effectiveTime = millis();
+        manager.ball.MOVEMENT *= 1.45;
+        manager.ball.currentSpeed.x = manager.ball.currentSpeed.x*1.45;
+        manager.ball.currentSpeed.y = manager.ball.currentSpeed.y*1.45;
+    }
+    
+    public void revertEffect() {
+        manager.ball.MOVEMENT /= 1.45;
+        manager.ball.currentSpeed.x = manager.ball.currentSpeed.x/1.45;
+        manager.ball.currentSpeed.y = manager.ball.currentSpeed.y/1.45;
+    }
     
 }
 

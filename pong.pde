@@ -20,6 +20,11 @@ PFont FONT;
 
 // Effects aparition
 int EFFECT_SECONDS = 5;
+int EFFECT_DISPELL_SECONDS = 1;
+PImage slowBallImg;
+PImage fastBallImg;
+PImage bigBallImg;
+PImage smallBallImg;
 
 GameManager manager;
 
@@ -27,13 +32,18 @@ void setup() {
     // Map declarations
     fullScreen();
     noSmooth();
-    // GameManager
-    manager = new GameManager();
+    // Assets
+    slowBallImg = loadImage("data/slow_ball.png");
+    fastBallImg = loadImage("data/fast_ball.png");
+    bigBallImg = loadImage("data/big_ball.png");
+    smallBallImg = loadImage("data/small_ball.png");
     FONT = loadFont("data/RetroGaming-48.vlw");
     COLLISION = new SoundFile(this, "sounds/hit.wav");
     BALL_POINT = new SoundFile(this, "sounds/impact.wav");
     SOUNDTRACK = new SoundFile(this, "sounds/soundtrack.wav");
     GAME_OVER = new SoundFile(this, "sounds/gameover.wav");
+    // GameManager
+    manager = new GameManager();
     thread("SoundTrackThread");
 }
 
