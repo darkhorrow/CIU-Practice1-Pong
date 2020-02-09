@@ -14,6 +14,7 @@ SoundFile COLLISION;
 SoundFile BALL_POINT;
 SoundFile SOUNDTRACK;
 SoundFile GAME_OVER;
+SoundFile EFFECT_PICKUP;
 
 // Text defaults
 PFont FONT;
@@ -42,6 +43,7 @@ void setup() {
     BALL_POINT = new SoundFile(this, "sounds/impact.wav");
     SOUNDTRACK = new SoundFile(this, "sounds/soundtrack.wav");
     GAME_OVER = new SoundFile(this, "sounds/gameover.wav");
+    EFFECT_PICKUP = new SoundFile(this, "sounds/powerup.wav");
     // GameManager
     manager = new GameManager();
     thread("SoundTrackThread");
@@ -96,6 +98,6 @@ void PointSound() {
      BALL_POINT.play();
 }
 
-void GameOverSound() {
-     GAME_OVER.play();
+void EffectSound() {
+     EFFECT_PICKUP.play(); 
 }

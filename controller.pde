@@ -40,7 +40,6 @@ class GameManager {
                 if(millis() > timer + (EFFECT_SECONDS*1000)) {
                     int chooser = int(random(usableEffects.length)); 
                     effects.add(usableEffects[chooser].create());
-                    println("Effect box added: " + usableEffects[chooser]);
                     timer = millis();
                 }
               
@@ -62,6 +61,9 @@ class GameManager {
             if(GAME_OVER.isPlaying()) {
                 displayGameOver();
             } else {
+                if(!SOUNDTRACK.isPlaying()) {
+                    thread("SoundTrackThread");
+                }
                 leftScore = 0;
                 rightScore = 0;
                 timer = millis();
@@ -198,8 +200,9 @@ class GameManager {
         triangle((width/2)+3*w/2, height/2, (width/2)+3*w/2, (height/2)-h, (width/2)+w/2, height/2);
         rect(width/2, (height/2)+w/2, w*3, h/3);
         if(!GAME_OVER.isPlaying() && isGameOver) {
+            SOUNDTRACK.pause();
             GAME_OVER.play();
-            GAME_OVER.amp(0.5);
+            GAME_OVER.amp(0.4);
             isGameOver = false;
             maxScore = 5;
             scoreSelector = "5";
@@ -236,7 +239,6 @@ class GameManager {
         ArrayList<EffectBox> iterAux = new ArrayList<EffectBox>(effects);
         for(EffectBox effect : iterAux) {
             if(effect.triggered){
-                println("Effect already triggered: " + effect);
                 continue;
             }
             float left = effect.currentPosition.x - effect.dimension.width/2;
@@ -245,8 +247,8 @@ class GameManager {
             float bottom = effect.currentPosition.y + effect.dimension.height/2;
             
             if(ballX + ballRadius > left && ballX - ballRadius < right && ballY + ballRadius > top && ballY - ballRadius < bottom) {
+                thread("EffectSound");
                 effect.triggerEffect();
-                println("Effect triggered: " + effect);
             }
         }
     }
