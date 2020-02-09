@@ -20,7 +20,7 @@ PFont FONT;
 
 // Effects aparition
 int EFFECT_SECONDS = 5;
-int EFFECT_DISPELL_SECONDS = 1;
+int EFFECT_DISPELL_SECONDS = 3;
 PImage slowBallImg;
 PImage fastBallImg;
 PImage bigBallImg;

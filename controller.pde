@@ -12,11 +12,7 @@ class GameManager {
     boolean isGameOver = false;
     
     String scoreSelector = "5";
-    EffectBox[] usableEffects = { new SmallBallEffectBox(new Position(random(200, width-200), random(200, height-200)), new Dimension(60, 60), color(0, 0, 255)),
-                                  new BigBallEffectBox(new Position(random(200, width-200), random(200, height-200)), new Dimension(60, 60), color(255, 150,0)),
-                                  new SlowBallEffectBox(new Position(random(200, width-200), random(200, height-200)), new Dimension(60, 60), color(255,0, 0)),
-                                  new FastBallEffectBox(new Position(random(200, width-200), random(200, height-200)), new Dimension(60, 60), color(0,255,0))
-    };
+    EffectBoxFactory[] usableEffects = { new SmallBallFactory(), new BigBallFactory(), new SlowBallFactory(), new FastBallFactory(), };
     ArrayList<EffectBox> effects = new ArrayList<EffectBox>();
     int timer = millis();
     
@@ -43,7 +39,7 @@ class GameManager {
             if(!isPaused && !isGameOver){
                 if(millis() > timer + (EFFECT_SECONDS*1000)) {
                     int chooser = int(random(usableEffects.length)); 
-                    effects.add(usableEffects[chooser]);
+                    effects.add(usableEffects[chooser].create());
                     println("Effect box added: " + usableEffects[chooser]);
                     timer = millis();
                 }
@@ -228,7 +224,6 @@ class GameManager {
     
     void displayEffects() {
         ArrayList<EffectBox> iterAux = new ArrayList<EffectBox>(effects);
-        printArray(effects);
         for(EffectBox effect : iterAux) {
             effect.display();
         }
@@ -240,7 +235,10 @@ class GameManager {
         float ballRadius = ball.dimension.height;
         ArrayList<EffectBox> iterAux = new ArrayList<EffectBox>(effects);
         for(EffectBox effect : iterAux) {
-            if(effect.triggered) continue;
+            if(effect.triggered){
+                println("Effect already triggered: " + effect);
+                continue;
+            }
             float left = effect.currentPosition.x - effect.dimension.width/2;
             float right = effect.currentPosition.x + effect.dimension.width/2;
             float top = effect.currentPosition.y - effect.dimension.height/2;

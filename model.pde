@@ -22,6 +22,11 @@ class Ball {
         currentPosition.y += currentSpeed.y;
     }
     
+    @Override
+    public String toString() {
+        return "Movement: " + MOVEMENT + " Speed X: " + currentSpeed.x + " Speed Y: " + currentSpeed.y;
+    }
+    
     public void display() {
          fill(fillColor);
          noStroke();
@@ -68,6 +73,10 @@ class Player {
 interface EffectTriggerer {
     public void triggerEffect();
     public void revertEffect();
+}
+
+interface EffectBoxFactory {
+    public EffectBox create();
 }
 
 abstract class EffectBox implements EffectTriggerer {
@@ -185,6 +194,38 @@ class FastBallEffectBox extends EffectBox {
         manager.ball.currentSpeed.y = manager.ball.currentSpeed.y/1.45;
     }
     
+}
+
+class SmallBallFactory implements EffectBoxFactory {
+  
+    public EffectBox create() {
+        return new SmallBallEffectBox(new Position(random(200, width-200), random(200, height-200)), new Dimension(60, 60), color(0, 0, 255));
+    }
+
+}
+
+class BigBallFactory implements EffectBoxFactory {
+  
+    public EffectBox create() {
+        return new BigBallEffectBox(new Position(random(200, width-200), random(200, height-200)), new Dimension(60, 60), color(255, 150,0));
+    }
+
+}
+
+class SlowBallFactory implements EffectBoxFactory {
+  
+    public EffectBox create() {
+        return new SlowBallEffectBox(new Position(random(200, width-200), random(200, height-200)), new Dimension(60, 60), color(255,0, 0));
+    }
+
+}
+
+class FastBallFactory implements EffectBoxFactory {
+  
+    public EffectBox create() {
+        return new FastBallEffectBox(new Position(random(200, width-200), random(200, height-200)), new Dimension(60, 60), color(0,255,0));
+    }
+
 }
 
 enum PlayerSide {
