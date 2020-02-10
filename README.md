@@ -2,9 +2,9 @@
 
 ## Contenidos
 
-1. [Introducción](#intro)
+1. [Introducción](#introducción)
 
-## <a name="pookie">Introducción</a>
+## Introducción
 
 El objetivo de esta práctica consiste en implementar en Processing el clásico juego del Pong.
 
@@ -261,3 +261,24 @@ Estas clases implementarán el método <i>create()</i>, que devuelve una nueva i
 Y con esto, finalizan los apartados adicionales implementados.
 
 ## Animación del juego
+![GIF](data/benearogame.gif);
+
+## Referencias
+
+### Material
+
+<quote>Todo el material usado está licensiado con Creative Commons 0.</quote>
+
+<b>[[Sonidos y música]](https://freesound.org/)</b>
+
+<b>[[Fuente de texto]](https://www.dafont.com/es/bitmap.php)</b>
+
+### Herramientas
+
+<b>[[Diseño de los efectos]](https://www.pixilart.com/draw)</b>
+
+### Guías y ayuda
+
+<b>[[Colisión pelota-jugador]](https://thecodingtrain.com/CodingChallenges/067-pong.html)</b>
+
+<b>[[Referencia de Processing]](https://processing.org/reference/)</b>
