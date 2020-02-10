@@ -2,7 +2,32 @@
 
 ## Contenidos
 
-1. [Introducción](#introducción)
+* [Autoría](#autoría)
+* [Introducción](#introducción)
+* [Controles](#controles)
+* [Implementación base](#implementación-base)
+    * [Definición de la estructura](#definición-de-la-estructura)
+    * [Rebote de la pelota](#rebote-de-la-pelota)
+      * [Rebote con los muros superior/inferior](#rebote-con-los-muros-superiorinferior)
+      * [Rebote con los jugadores](#rebote-con-los-jugadores)
+    * [Marcador de puntos](#marcador-de-puntos)
+    * [Efectos sonoros](#efectos-sonoros)
+    * [Movimiento inicial aleatorio](#movimiento-inicial-aleatorio)
+* [Implementaciones adicionales](#implementaciones-adicionales)
+    * [Pantalla inicial de selección](#pantalla-inicial-de-selección)
+    * [Pantalla de Game Over](#pantalla-de-game-over)
+    * [Pulsado de una tecla para lanzar la pelota](#pulsado-de-una-tecla-para-lanzar-la-pelota)
+    * [Uso de una fuente externa](#uso-de-una-fuente-externa)
+    * [Objetos de bonificación](#objetos-de-bonificación)
+* [Animación del juego](#animación-del-juego)
+* [Referencias](#referencias)
+    * [Material](#material)
+    * [Herramientas](#herramientas)
+    * [Guías y ayuda](#guías-y-ayuda)
+
+## Autoría
+
+Esta obra es un trabajo realizado por Benearo Semidan Páez para la asignatura de Creación de Interfaces de Usuario cursada en la ULPGC.
 
 ## Introducción
 
@@ -58,7 +83,7 @@ El movimiento de la pelota se realiza sumando a la posición actual de esta la v
 
 Por lo tanto, el cálculo del rebote implica el cálculo de la velocidad a aplicar en cada eje.
 
-#### Rebote con los muros superior/inferior:
+#### Rebote con los muros superior/inferior
 
 Este es el más simple y se logra cambiando el signo de la velocidad en el eje Y.
 
