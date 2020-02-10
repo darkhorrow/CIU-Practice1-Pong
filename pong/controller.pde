@@ -164,6 +164,14 @@ class GameManager {
         textAlign(CENTER, CENTER);
         fill(color(0,random(255),random(255)));
         text("Press 'R' to launch the ball!", width/2, height/2 - 100);
+        
+        textSize(25);
+        textAlign(LEFT);
+        text("Go up -> W", 15, height-100);
+        text("Go down -> S", 15, height-50);
+        textAlign(LEFT);
+        text("Go up -> Up arrow", width/2+15, height-100);
+        text("Go down -> Down arrow", width/2+15, height-50);
     }
     
     public void displayGameStart() {
