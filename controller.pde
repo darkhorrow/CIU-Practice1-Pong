@@ -210,6 +210,27 @@ class GameManager {
         }        
     }
     
+    public void checkBallEffectsCollision() {
+        float ballX = ball.currentPosition.x;
+        float ballY = ball.currentPosition.y;
+        float ballRadius = ball.dimension.height;
+        ArrayList<EffectBox> iterAux = new ArrayList<EffectBox>(effects);
+        for(EffectBox effect : iterAux) {
+            if(effect.triggered){
+                continue;
+            }
+            float left = effect.currentPosition.x - effect.dimension.width/2;
+            float right = effect.currentPosition.x + effect.dimension.width/2;
+            float top = effect.currentPosition.y - effect.dimension.height/2;
+            float bottom = effect.currentPosition.y + effect.dimension.height/2;
+            
+            if(ballX + ballRadius > left && ballX - ballRadius < right && ballY + ballRadius > top && ballY - ballRadius < bottom) {
+                thread("EffectSound");
+                effect.triggerEffect();
+            }
+        }
+    }
+    
     public void respawnBall() {
        ball = new Ball(new Dimension(BALL_SIZE, BALL_SIZE), BALL_COLOR);
        playerLeft.currentPosition.y = height/2;
@@ -229,27 +250,6 @@ class GameManager {
         ArrayList<EffectBox> iterAux = new ArrayList<EffectBox>(effects);
         for(EffectBox effect : iterAux) {
             effect.display();
-        }
-    }
-    
-    public void checkBallEffectsCollision() {
-        float ballX = ball.currentPosition.x;
-        float ballY = ball.currentPosition.y;
-        float ballRadius = ball.dimension.height;
-        ArrayList<EffectBox> iterAux = new ArrayList<EffectBox>(effects);
-        for(EffectBox effect : iterAux) {
-            if(effect.triggered){
-                continue;
-            }
-            float left = effect.currentPosition.x - effect.dimension.width/2;
-            float right = effect.currentPosition.x + effect.dimension.width/2;
-            float top = effect.currentPosition.y - effect.dimension.height/2;
-            float bottom = effect.currentPosition.y + effect.dimension.height/2;
-            
-            if(ballX + ballRadius > left && ballX - ballRadius < right && ballY + ballRadius > top && ballY - ballRadius < bottom) {
-                thread("EffectSound");
-                effect.triggerEffect();
-            }
         }
     }
     

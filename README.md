@@ -1,12 +1,26 @@
 # <center>CIU - Práctica 1</center>
 
-## Introducción
+## Contenidos
+
+1. [Introducción](#intro)
+
+## <a name="pookie">Introducción</a>
 
 El objetivo de esta práctica consiste en implementar en Processing el clásico juego del Pong.
 
 De manera base, consiste en 2 jugadores en forma de palo que pueden moverse únicamente en el eje Y. El objetivo es hacer pasar la pelota detrás del muro del adversario para anotar puntos.
 
 A continuación, veremos los detalles de implementación. En primer lugar, identificaremos los aspectos básicos del juego y luego, mostraremos las características adicionales añadidas.
+
+## Controles
+
+Jugador 1
+- Arriba: [ W ]
+- Abajo: [ S ]
+
+Jugador 2
+- Arriba: [ Flecha arriba ]
+- Abajo: [ Flecha abajo ]
 
 ## Implementación base
 
@@ -59,9 +73,28 @@ Este es el más simple y se logra cambiando el signo de la velocidad en el eje Y
 
 Este requiere más trabajo con fin de evitar errores visuales inesperados, así como un rebote más natural con respecto a la zona de choque de la pelota.
 
-El cálculo de la velocidad lo extraje de tanto de este vídeo {vídeo de pong} como de este otro {vídeo del cálculo}, ambos de {nombre del pibe}.
+El cálculo de la velocidad lo extraje de [esta web](https://thecodingtrain.com/CodingChallenges/067-pong.html) y del vídeo presente en la misma.
 
-La idea principal es...
+La idea principal es mapear todo el alto del jugador para que el choque de la bola en una altura específica implique un radián determiando y así, mediantge el sexo para X y el coseno para Y, obetener la velocidad adecuada para el ángulo de incidencia de la pelota respecto al jugador.
+
+    // Jugador de la izquierda
+
+    float diff = ballY - (leftPlayerY - leftPlayerHeight/2);
+    float radians =  radians(45);
+    float angle = map(diff, 0, leftPlayerHeight, -radians, radians);
+    ball.currentSpeed.x = 2 * ball.MOVEMENT * cos(angle);
+    ball.currentSpeed.y = 2 * ball.MOVEMENT * sin(angle);
+    ball.currentPosition.x = leftPlayerX + (leftPlayerWidth/2) + ballRadius;
+    thread("CollisionSound");
+
+    // Jugador de la derecha
+
+    float diff = ballY - (rightPlayerY - rightPlayerHeight/2);
+    float angle = map(diff, 0, rightPlayerHeight, radians(225), radians(135));
+    ball.currentSpeed.x = 2 * ball.MOVEMENT * cos(angle);
+    ball.currentSpeed.y = 2 * ball.MOVEMENT * sin(angle);
+    ball.currentPosition.x = rightPlayerX - (rightPlayerWidth/2) - ballRadius;
+    thread("CollisionSound");
 
 ### Marcador de puntos
 
@@ -226,3 +259,5 @@ Estas clases implementarán el método <i>create()</i>, que devuelve una nueva i
     }
 
 Y con esto, finalizan los apartados adicionales implementados.
+
+## Animación del juego
