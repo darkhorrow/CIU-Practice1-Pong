@@ -100,7 +100,7 @@ Este requiere más trabajo con fin de evitar errores visuales inesperados, así 
 
 El cálculo de la velocidad lo extraje de [esta web](https://thecodingtrain.com/CodingChallenges/067-pong.html) y del vídeo presente en la misma.
 
-La idea principal es mapear todo el alto del jugador para que el choque de la bola en una altura específica implique un radián determiando y así, mediantge el sexo para X y el coseno para Y, obetener la velocidad adecuada para el ángulo de incidencia de la pelota respecto al jugador.
+La idea principal es mapear todo el alto del jugador para que el choque de la bola en una altura específica implique un radián determiando y así, mediante el seno para X y el coseno para Y, obetener la velocidad adecuada para el ángulo de incidencia de la pelota respecto al jugador.
 
     // Jugador de la izquierda
 
